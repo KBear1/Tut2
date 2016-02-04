@@ -1,0 +1,41 @@
+---
+title: "tut2"
+output: html_document
+---
+
+```{r}
+labs <- read.csv("C:/Users/user/Desktop/2015-16 sem2/is4250/labs.csv")
+a <- mean(labs$WaitTime)
+##waiting time KPI as mean
+library(ggplot2)
+ggplot(data=labs,aes(x=labs$WaitTime))+geom_bar()
+dplyr::filter(labs, labs$WaitTime>a)
+
+#1(ii) service satisfaction 
+b <- nrow(labs)*80/100
+## KPI as 80th percentile
+ggplot(data=labs,aes(x=labs$SvcSat))+geom_bar()
+
+#difference in SvcSat for age and gender
+labs$SvcSat <- as.numeric(labs$SvcSat)
+labs$Gender <- as.numeric(labs$Gender)
+cor(labs$SvcSat, labs$Gender)
+cor(labs$SvcSat, labs$AGE)
+
+# SvcSat and Waiting time
+labs$WaitTime = as.numeric(labs$WaitTime)
+cor(labs$SvcSat, labs$WaitTime)
+
+#BMI
+bmi <- (labs$WT / (labs$HT^2))
+labs$BMI <- bmi
+knitr::kable(labs)
+labs$BMI <- as.numeric(labs$BMI)
+labs$TC <- as.numeric(labs$TC)
+cor(labs$BMI, labs$TC)
+
+#Predict BMI
+dplyr::filter(labs, labs$AGE>43, labs$AGE<47, labs$Citizen=="Y")
+#BMI would be more than 27.5 as BMI and TC have a positive correlation
+```
+
